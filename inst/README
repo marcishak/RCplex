@@ -1,0 +1,16 @@
+Rcplex -- An R Interface to the IBM ILOG CPLEX Optimizer 
+
+CPLEX is an industrial-strength solver for linear, quadratic and mixed
+integer programs.  This interface uses the CPLEX callable library to
+create and solve problems of these types.  Problem type is determined
+by problem data passed to the Rcplex function.  Many CPLEX parameters
+are allowed to be set with functions to set any CPLEX parameter
+forthcoming in future versions.
+
+Installation of the Rcplex package REQUIRES a working CPLEX
+installation. See the file "INSTALL" for details on how to install the
+Rcplex package on Linux/Unix-like and Windows systems.
+
+Authors: Hector Corrada Bravo and Stefan Theussl with contributions
+from Kurt Hornik (to report bugs send an email to
+stefan.theussl@R-project.org)
