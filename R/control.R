@@ -13,9 +13,9 @@ check.Rcplex.control <- function(control, isQP)
                 itlim             = 2.1e+9L,## Simplex maximum iterations limit
                                          ## normally the above should be
                                          ## '.Machine$integer.max' but CPLEX
-                                         ## doesn't accept this ... 
-                epagap            = 0,## Absolute MIP gap tolerance 
-                epgap             = 1e-4,## Relative MIP gap tolerance 
+                                         ## doesn't accept this ...
+                epagap            = 0,## Absolute MIP gap tolerance
+                epgap             = 1e-4,## Relative MIP gap tolerance
                 tilim             = 1e74,## Optimizer time limit [sec]
                 disjcuts          = 0L,  ## disjunctive cuts switch
                 mipemphasis       = 0L,  ## MIP Emphasis switch
@@ -42,9 +42,10 @@ check.Rcplex.control <- function(control, isQP)
                 solnpoolintensity = 0L,  ## Solution pool intensity
                 ## User parameter
                 maxcalls          = 500L,## max calls to CPLEX lib before renewing license
-                round             = 0L)  ## round integer solutions after
-                                         ## optimization 
-    
+                round             = 0L,  ## round integer solutions after
+                                         ## optimization
+                threads = 0L)
+
     con[names(control)] <- control
 
     if (!is.null(con$trace)) {
@@ -77,7 +78,7 @@ check.Rcplex.control <- function(control, isQP)
         con$preind <- 1L
       }
     }
-    
+
     if (!is.null(con$aggind)) {
       con$aggind <- as.integer(con$aggind)
       if(con$aggind < 0L && con$aggind != -1L) {
@@ -90,7 +91,7 @@ check.Rcplex.control <- function(control, isQP)
       con$itlim <- as.integer(con$itlim)
       if((con$itlim < 0L) ||  (con$itlim > 2.1e+9L)) {
         warning("Improper value for itlim parameter. Using default.")
-        con$itlim <- 2.1e+9L 
+        con$itlim <- 2.1e+9L
       }
     }
 
@@ -101,7 +102,7 @@ check.Rcplex.control <- function(control, isQP)
         con$epagap <- 0
       }
     }
-    
+
     if (!is.null(con$epgap)) {
       con$epgap <- as.numeric(con$epgap)
       if(con$epgap < 0 || con$epgap > 1) {
@@ -109,7 +110,7 @@ check.Rcplex.control <- function(control, isQP)
         con$epgap <- 1e-4
       }
     }
-    
+
     if (!is.null(con$tilim)) {
       con$tilim <- as.numeric(con$tilim)
       if(con$tilim < 0) {
@@ -203,11 +204,18 @@ check.Rcplex.control <- function(control, isQP)
         con$maxcalls <- 500L
       }
     }
-    
+
     if (!is.null(con$round)) {
       if (!con$round %in% c(0,1)) {
         warning("Improper value for round option: Using default")
         con$round <- 0
+      }
+    }
+    if (!is.null(con$threads)) {
+      con$threads <- as.integer(con$threads)
+      if (!con$threads > -1) {
+        warning("Improper value for threads option: Using default")
+        con$threads <- 0
       }
     }
     return(con)
@@ -216,7 +224,7 @@ check.Rcplex.control <- function(control, isQP)
 split.control.list <- function(control){
     R.names <- c("round", "maxcalls")
     C.names <- setdiff(names(control), R.names)
-    
+
     R.control <- control[R.names]
     C.control <- control[C.names]
 

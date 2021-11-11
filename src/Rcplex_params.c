@@ -4,7 +4,7 @@ void setparams(CPXENVptr env, SEXP control, int isQP, int isMIP) {
   int i, status, value;
   const char *cur_parm;
   SEXP names;
-  
+
   /* get list names */
   PROTECT(names = getAttrib(control, R_NamesSymbol));
 
@@ -15,10 +15,10 @@ void setparams(CPXENVptr env, SEXP control, int isQP, int isMIP) {
   for (i = 0; i < length(control); i++) {
 
     cur_parm = CHAR(STRING_ELT(names, i));
-    
+
     /* trace - CPX_PARAM_SCRIND */
     if(strcmp(cur_parm, "trace") == 0) {
-      status = CPXsetintparam(env, CPX_PARAM_SCRIND, 
+      status = CPXsetintparam(env, CPX_PARAM_SCRIND,
 		  *INTEGER(VECTOR_ELT(control, i)) ? CPX_ON : CPX_OFF);
     }
     /* method */
@@ -39,10 +39,10 @@ void setparams(CPXENVptr env, SEXP control, int isQP, int isMIP) {
       case 4:
 	value = CPX_ALG_BARRIER;
       case 5:
-      value = CPX_ALG_SIFTING;
-      break;
+    value = CPX_ALG_SIFTING;
+    break;
       case 6:
-      value = CPX_ALG_CONCURRENT;
+    value = CPX_ALG_CONCURRENT;
 	break;
       default:
 	warning("Unknown optimization method %d, using default\n", value);
@@ -63,7 +63,7 @@ void setparams(CPXENVptr env, SEXP control, int isQP, int isMIP) {
 			      *INTEGER(VECTOR_ELT(control, i)));
     }
     else if(strcmp(cur_parm, "itlim") == 0) {
-      status = CPXsetintparam(env, CPX_PARAM_ITLIM, 
+      status = CPXsetintparam(env, CPX_PARAM_ITLIM,
 			      *INTEGER(VECTOR_ELT(control, i)));
     }
     else if(strcmp(cur_parm, "epgap") == 0) {
@@ -71,11 +71,11 @@ void setparams(CPXENVptr env, SEXP control, int isQP, int isMIP) {
 			      *REAL(VECTOR_ELT(control, i)));
     }
     else if(strcmp(cur_parm, "epagap") == 0) {
-      status = CPXsetdblparam(env, CPX_PARAM_EPAGAP, 
+      status = CPXsetdblparam(env, CPX_PARAM_EPAGAP,
     			      *REAL(VECTOR_ELT(control, i)));
     }
     else if(strcmp(cur_parm,"tilim") == 0) {
-      status = CPXsetdblparam(env, CPX_PARAM_TILIM, 
+      status = CPXsetdblparam(env, CPX_PARAM_TILIM,
 			      *REAL(VECTOR_ELT(control, i)));
     }
     else if(strcmp(cur_parm, "mipemphasis") == 0) {
@@ -102,11 +102,11 @@ void setparams(CPXENVptr env, SEXP control, int isQP, int isMIP) {
       status = CPXsetintparam(env, CPX_PARAM_MIPEMPHASIS, value);
     }
     else if(strcmp(cur_parm, "disjcuts") == 0) {
-      status = CPXsetintparam(env, CPX_PARAM_DISJCUTS, 
+      status = CPXsetintparam(env, CPX_PARAM_DISJCUTS,
 			      *INTEGER(VECTOR_ELT(control,i)));
     }
     else if(strcmp(cur_parm, "cliques") == 0) {
-      status = CPXsetintparam(env, CPX_PARAM_CLIQUES, 
+      status = CPXsetintparam(env, CPX_PARAM_CLIQUES,
 			      *INTEGER(VECTOR_ELT(control, i)));
     }
     else if(strcmp(cur_parm,"nodesel") == 0) {
@@ -154,7 +154,7 @@ void setparams(CPXENVptr env, SEXP control, int isQP, int isMIP) {
 	value = CPX_VARSEL_PSEUDOREDUCED;
 	break;
       default:
-	warning("Unknown variable selection strategy %d, using default\n", 
+	warning("Unknown variable selection strategy %d, using default\n",
 		value);
 	value = CPX_VARSEL_DEFAULT;
       }
@@ -167,10 +167,10 @@ void setparams(CPXENVptr env, SEXP control, int isQP, int isMIP) {
     /*
      * solution pools not supported until cplex 11.0
      */
-    
+
     else if(strcmp(cur_parm, "solnpoolagap") == 0){
       /* solution pool parameters */
-      #if CPX_VERSION >= 1100 
+      #if CPX_VERSION >= 1100
       status = CPXsetdblparam(env, CPX_PARAM_SOLNPOOLAGAP,
       			      *REAL(VECTOR_ELT(control, i)));
       #endif
@@ -184,9 +184,13 @@ void setparams(CPXENVptr env, SEXP control, int isQP, int isMIP) {
     }
     else if(strcmp(cur_parm, "solnpoolintensity") == 0){
       #if CPX_VERSION >= 1100
-      status = CPXsetintparam(env, CPX_PARAM_SOLNPOOLINTENSITY, 
+      status = CPXsetintparam(env, CPX_PARAM_SOLNPOOLINTENSITY,
     			      *INTEGER(VECTOR_ELT(control, i)));
       #endif
+    }
+    else if(strcmp(cur_parm, "threads") == 0) {
+        status = CPXsetintparam(env, CPX_PARAM_THREADS,
+                                *INTEGER(VECTOR_ELT(control, i)));
     }
     else {
       /* If parameter not known print a warning */
@@ -196,6 +200,6 @@ void setparams(CPXENVptr env, SEXP control, int isQP, int isMIP) {
     if (status)
       my_error(("Failure to set parameter %s, error %d.\n", cur_parm, status));
   }
-  
+
   UNPROTECT(1);
 }
