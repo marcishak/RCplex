@@ -1,7 +1,7 @@
 ﻿# RCplex
 
 
-Patched version of RCPLEX, tested on WSL with 
+A Patched version of RCPLEX to acutally make installing possible + the ability to use multithreading. Tested on WSL with 
 
 ```
 R CMD build Rcplex
