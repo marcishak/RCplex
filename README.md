@@ -10,4 +10,4 @@ R CMD INSTALL Rcplex_0.3-3.tar.gz --configure-args="--with-cplex-dir=/opt/ibm/IL
 
 `
 
-if using ROI plz run `ROI_plugin_register_solver_control("cplex", "threads", "X")` beforehand
+if using ROI plz run `ROI_plugin_register_solver_control("cplex", "threads", "X")` before any optimisation occurs for access to the `threads` param
